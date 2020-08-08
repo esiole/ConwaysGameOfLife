@@ -44,31 +44,31 @@ namespace ConwaysGameOfLife
         private void CreateMap(int width, int height, int cellSize)
         {
             var beginState = Game.CreateState(width, height);
-            beginState[3, 3].State = Brushes.Black;
-            beginState[3, 4].State = Brushes.Black;
-            beginState[3, 5].State = Brushes.Black;
-            beginState[3, 6].State = Brushes.Black;
-            beginState[3, 7].State = Brushes.Black;
-            beginState[4, 3].State = Brushes.Black;
-            beginState[4, 4].State = Brushes.Black;
-            beginState[4, 5].State = Brushes.Black;
-            beginState[4, 6].State = Brushes.Black;
-            beginState[4, 7].State = Brushes.Black;
-            beginState[5, 3].State = Brushes.Black;
-            beginState[5, 4].State = Brushes.Black;
-            beginState[5, 5].State = Brushes.Black;
-            beginState[5, 6].State = Brushes.Black;
-            beginState[5, 7].State = Brushes.Black;
-            beginState[6, 3].State = Brushes.Black;
-            beginState[6, 4].State = Brushes.Black;
-            beginState[6, 5].State = Brushes.Black;
-            beginState[6, 6].State = Brushes.Black;
-            beginState[6, 7].State = Brushes.Black;
-            beginState[7, 3].State = Brushes.Black;
-            beginState[7, 4].State = Brushes.Black;
-            beginState[7, 5].State = Brushes.Black;
-            beginState[7, 6].State = Brushes.Black;
-            beginState[7, 7].State = Brushes.Black;
+            beginState[3, 3].State = Cell.Alive;
+            beginState[3, 4].State = Cell.Alive;
+            beginState[3, 5].State = Cell.Alive;
+            beginState[3, 6].State = Cell.Alive;
+            beginState[3, 7].State = Cell.Alive;
+            beginState[4, 3].State = Cell.Alive;
+            beginState[4, 4].State = Cell.Alive;
+            beginState[4, 5].State = Cell.Alive;
+            beginState[4, 6].State = Cell.Alive;
+            beginState[4, 7].State = Cell.Alive;
+            beginState[5, 3].State = Cell.Alive;
+            beginState[5, 4].State = Cell.Alive;
+            beginState[5, 5].State = Cell.Alive;
+            beginState[5, 6].State = Cell.Alive;
+            beginState[5, 7].State = Cell.Alive;
+            beginState[6, 3].State = Cell.Alive;
+            beginState[6, 4].State = Cell.Alive;
+            beginState[6, 5].State = Cell.Alive;
+            beginState[6, 6].State = Cell.Alive;
+            beginState[6, 7].State = Cell.Alive;
+            beginState[7, 3].State = Cell.Alive;
+            beginState[7, 4].State = Cell.Alive;
+            beginState[7, 5].State = Cell.Alive;
+            beginState[7, 6].State = Cell.Alive;
+            beginState[7, 7].State = Cell.Alive;
             Game = new Game(beginState);
 
             for (int j = 0; j < height; j++)
@@ -91,6 +91,7 @@ namespace ConwaysGameOfLife
                     {
                         Width = cellSize,
                         Height = cellSize,
+                        Fill = Brushes.Black
                     };
                     Map.Children.Add(shape);
                     Grid.SetRow(shape, x);
@@ -101,7 +102,7 @@ namespace ConwaysGameOfLife
                         Source = Game.CurrentState[x, y],
                         Path = new PropertyPath("State")
                     };
-                    shape.SetBinding(Shape.FillProperty, binding);
+                    shape.SetBinding(Shape.VisibilityProperty, binding);
                 }
             }
         }

@@ -13,13 +13,13 @@ namespace ConwaysGameOfLife
 {
     public class Cell : INotifyPropertyChanged
     {
-        public static SolidColorBrush Dead = Brushes.White;
-        public static SolidColorBrush Alive = Brushes.Black;
-        private SolidColorBrush state;
+        public static Visibility Dead = Visibility.Hidden;
+        public static Visibility Alive = Visibility.Visible;
+        private Visibility state;
 
         public bool IsAlive { get => state == Alive; }
 
-        public SolidColorBrush State
+        public Visibility State
         {
             get => state;
             set
@@ -29,15 +29,15 @@ namespace ConwaysGameOfLife
             }
         }
 
-        public Cell(SolidColorBrush state = default)
+        public Cell(Visibility state = Visibility.Hidden)
         {
-            if (state == null) State = Dead;
-            else State = state;
+            State = state;
         }
 
         public void ToggleState()
         {
             State = IsAlive ? Dead : Alive;
+            MessageBox.Show("dad");
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
