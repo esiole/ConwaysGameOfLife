@@ -22,22 +22,23 @@ namespace ConwaysGameOfLife
     /// </summary>
     public partial class MainWindow : Window
     {
-        public readonly Game Game;
+        private Game Game;
 
         public MainWindow()
         {
             InitializeComponent();
+            CreateMapButton.MouseDown += (sender, e) =>
+            {
+                StartInfoPanel.Children.Clear();
+                ToolBar.Visibility = Visibility.Visible;
+                CreateMap(15, 10, 30);
+            };
+            StartGameButton.Click += (sender, e) => Game.Start();
+        }
 
-            var width = 15;
-            var height = 10;
-            var cellSize = 30;
-
+        private void CreateMap(int width, int height, int cellSize)
+        {
             var beginState = Game.CreateState(width, height);
-            //beginState[0, 3].State = Brushes.Black;
-            //beginState[1, 4].State = Brushes.Black;
-            //beginState[2, 4].State = Brushes.Black;
-            //beginState[2, 3].State = Brushes.Black;
-            //beginState[2, 2].State = Brushes.Black;
             beginState[3, 3].State = Brushes.Black;
             beginState[3, 4].State = Brushes.Black;
             beginState[3, 5].State = Brushes.Black;
@@ -66,37 +67,39 @@ namespace ConwaysGameOfLife
             Game = new Game(beginState);
 
             for (int j = 0; j < height; j++)
-                Grid.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(cellSize) });
+                Map.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(cellSize) });
             for (int i = 0; i < width; i++)
-                Grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(cellSize) });
+                Map.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(cellSize) });
 
-            Grid.Width = width * cellSize;
-            Grid.Height = height * cellSize;
-            this.Height = Grid.Height + 40;
-            this.Width = Grid.Width + 15;
+            Map.Width = width * cellSize;
+            Map.Height = height * cellSize;
+            this.Height = Map.Height + 40;
+            this.Width = Map.Width + 15;
 
             for (int i = 0; i < height; i++)
             {
                 for (int j = 0; j < width; j++)
                 {
+                    int x = i;
+                    int y = j;
                     var shape = new Ellipse()
                     {
                         Width = cellSize,
                         Height = cellSize,
                     };
-                    Grid.Children.Add(shape);
-                    Grid.SetRow(shape, i);
-                    Grid.SetColumn(shape, j);
+                    Map.Children.Add(shape);
+                    Grid.SetRow(shape, x);
+                    Grid.SetColumn(shape, y);
+                    shape.MouseDown += (sender, e) => Game.CurrentState[x, y].State = Cell.Alive;
 
                     var binding = new Binding
                     {
-                        Source = Game.CurrentState[i, j],
+                        Source = Game.CurrentState[x, y],
                         Path = new PropertyPath("State")
                     };
                     shape.SetBinding(Shape.FillProperty, binding);
                 }
             }
-            Game.Start();
         }
     }
 }
