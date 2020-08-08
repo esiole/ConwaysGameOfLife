@@ -9,6 +9,8 @@
     <StackPanel>
         <ToolBar x:Name="ToolBar" Visibility="Collapsed">
             <Button x:Name="StartGameButton">Старт</Button>
+            <Button x:Name="SaveMapButton">Сохранить конфигурацию</Button>
+            <Button x:Name="LoadMapButton">Загрузить конфигурацию</Button>
         </ToolBar>
         <StackPanel x:Name="StartInfoPanel">
             <TextBlock>Conway's Game of Life</TextBlock>
@@ -16,7 +18,7 @@
                 <GroupBox.Header>
                     <TextBlock>Размер поля</TextBlock>
                 </GroupBox.Header>
-                <StackPanel>
+                <StackPanel x:Name="SizeMenu">
                     <RadioButton GroupName="SizeMap" IsChecked="True">10x10</RadioButton>
                     <RadioButton GroupName="SizeMap">20x30</RadioButton>
                     <RadioButton GroupName="SizeMap">30x20</RadioButton>
