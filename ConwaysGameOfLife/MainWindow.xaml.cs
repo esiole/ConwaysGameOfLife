@@ -27,7 +27,7 @@ namespace ConwaysGameOfLife
         public MainWindow()
         {
             InitializeComponent();
-            CreateMapButton.MouseDown += (sender, e) =>
+            CreateMapButton.Click += (sender, e) =>
             {
                 StartInfoPanel.Children.Clear();
                 ToolBar.Visibility = Visibility.Visible;
@@ -35,6 +35,7 @@ namespace ConwaysGameOfLife
             };
             StartGameButton.Click += (sender, e) =>
             {
+                StartGameButton.IsEnabled = false;
                 Map.IsHitTestVisible = false;
                 Game.Start();
             };
