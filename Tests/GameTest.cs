@@ -22,7 +22,7 @@ namespace Tests
                     Assert.AreEqual(game.CurrentState[i, j].State, endState[i, j].State);
             //Assert.AreEqual(endState, game.CurrentState);
         }
-
+        
         [TestMethod]
         public void SizeMap()
         {

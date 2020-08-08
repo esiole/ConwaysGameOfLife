@@ -45,8 +45,8 @@ namespace ConwaysGameOfLife
             {
                 while (true)
                 {
-                    Iteration();
                     Thread.Sleep(1000);
+                    Iteration();
                 }
             });
         }
