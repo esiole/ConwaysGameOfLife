@@ -35,6 +35,11 @@ namespace ConwaysGameOfLife
             else State = state;
         }
 
+        public void ToggleState()
+        {
+            State = IsAlive ? Dead : Alive;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {

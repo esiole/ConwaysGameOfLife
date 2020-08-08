@@ -33,7 +33,11 @@ namespace ConwaysGameOfLife
                 ToolBar.Visibility = Visibility.Visible;
                 CreateMap(15, 10, 30);
             };
-            StartGameButton.Click += (sender, e) => Game.Start();
+            StartGameButton.Click += (sender, e) =>
+            {
+                Map.IsHitTestVisible = false;
+                Game.Start();
+            };
         }
 
         private void CreateMap(int width, int height, int cellSize)
@@ -90,8 +94,7 @@ namespace ConwaysGameOfLife
                     Map.Children.Add(shape);
                     Grid.SetRow(shape, x);
                     Grid.SetColumn(shape, y);
-                    shape.MouseDown += (sender, e) => Game.CurrentState[x, y].State = Cell.Alive;
-
+                    shape.MouseDown += (sender, e) => Game.CurrentState[x, y].ToggleState();
                     var binding = new Binding
                     {
                         Source = Game.CurrentState[x, y],
