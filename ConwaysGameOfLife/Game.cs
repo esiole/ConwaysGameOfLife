@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -21,6 +24,50 @@ namespace ConwaysGameOfLife
 
         public Cell[,] CurrentState { get; private set; }
         public Cell[,] NextState { get; private set; }
+        public bool IsStart { get; private set; }
+
+        private Command startCommand;
+        public Command StartCommand
+        {
+            get
+            {
+                return startCommand ?? (startCommand = new Command(obj =>
+                {
+                    IsStart = true;
+                    Start();
+                }, 
+                obj => !IsStart
+                ));
+            }
+        }
+
+        private Command saveCommand;
+        public Command SaveCommand
+        {
+            get
+            {
+                return saveCommand ?? (saveCommand = new Command(obj =>
+                {
+                    WriteJsonAsync();
+                },
+                obj => !IsStart
+                ));
+            }
+        }
+
+        private Command loadCommand;
+        public Command LoadCommand
+        {
+            get
+            {
+                return loadCommand ?? (loadCommand = new Command(obj =>
+                {
+                    ReadJsonAsync();
+                },
+                obj => !IsStart
+                ));
+            }
+        }
 
         public Game(Cell[,] beginState)
         {
@@ -106,6 +153,37 @@ namespace ConwaysGameOfLife
             if (CurrentState[iIncrement, jIncrement].IsAlive) countAlive++;
 
             return countAlive;
+        }
+
+        private async void WriteJsonAsync()
+        {
+            var dialog = new SaveFileDialog()
+            {
+                Filter = "json files (*.json)|*.json",
+            };
+            dialog.ShowDialog();
+            using (var stream = new StreamWriter(dialog.FileName))
+            {
+                var json = JsonConvert.SerializeObject(CurrentState);
+                await stream.WriteLineAsync(json);
+            }
+        }
+
+        private async void ReadJsonAsync()
+        {
+            var dialog = new OpenFileDialog()
+            {
+                Filter = "json files (*.json)|*.json",
+            };
+            dialog.ShowDialog();
+            using (var stream = new StreamReader(dialog.FileName))
+            {
+                var json = await stream.ReadToEndAsync();
+                var map = JsonConvert.DeserializeObject<Cell[,]>(json);
+                for (int i = 0; i < Height; i++)
+                    for (int j = 0; j < Width; j++)
+                        CurrentState[i, j].State = map[i, j].State;
+            }
         }
     }
 }

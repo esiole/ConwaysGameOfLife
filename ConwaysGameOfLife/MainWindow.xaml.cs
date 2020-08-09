@@ -41,14 +41,8 @@ namespace ConwaysGameOfLife
             };
             StartGameButton.Click += (sender, e) =>
             {
-                StartGameButton.IsEnabled = false;
-                SaveMapButton.IsEnabled = false;
-                LoadMapButton.IsEnabled = false;
                 Map.IsHitTestVisible = false;
-                Game.Start();
             };
-            SaveMapButton.Click += (sender, e) => WriteJsonAsync(/*"data.json", */Game.CurrentState);
-            LoadMapButton.Click += (sender, e) => ReadJsonAsync(/*"data.json"*/);
             SizeMenu.AddHandler(RadioButton.CheckedEvent, new RoutedEventHandler(RadioButtonSizeChecked));
         }
 
@@ -90,6 +84,10 @@ namespace ConwaysGameOfLife
                     shape.SetBinding(Shape.FillProperty, binding);
                 }
             }
+
+            StartGameButton.Command = Game.StartCommand;
+            SaveMapButton.Command = Game.SaveCommand;
+            LoadMapButton.Command = Game.LoadCommand;
         }
 
         private void RadioButtonSizeChecked(object sender, RoutedEventArgs e)
@@ -99,37 +97,6 @@ namespace ConwaysGameOfLife
             var data = text.Split('x');
             widthMap = int.Parse(data[0]);
             heightMap = int.Parse(data[1]);
-        }
-
-        private async void WriteJsonAsync(/*string fileName, */object serializeObject)
-        {
-            var dialog = new SaveFileDialog()
-            {
-                Filter = "json files (*.json)|*.json",
-            };
-            dialog.ShowDialog();
-            using (var stream = new StreamWriter(dialog.FileName))
-            {
-                var json = JsonConvert.SerializeObject(serializeObject);
-                await stream.WriteLineAsync(json);
-            }
-        }
-
-        private async void ReadJsonAsync(/*string fileName*/)
-        {
-            var dialog = new OpenFileDialog()
-            {
-                Filter = "json files (*.json)|*.json",
-            };
-            dialog.ShowDialog();
-            using (var stream = new StreamReader(dialog.FileName))
-            {
-                var json = await stream.ReadToEndAsync();
-                var map = JsonConvert.DeserializeObject<Cell[,]>(json);
-                for (int i = 0; i < heightMap; i++)
-                    for (int j = 0; j < widthMap; j++)
-                        Game.CurrentState[i, j].State = map[i, j].State;
-            }
         }
     }
 }
