@@ -72,6 +72,21 @@ namespace ConwaysGameOfLife
             }
         }
 
+        private Command toggleCommand;
+        public Command ToggleCommand
+        {
+            get
+            {
+                return toggleCommand ?? (toggleCommand = new Command(obj =>
+                {
+                    var cell = (Cell)obj;
+                    cell.ToggleState();
+                },
+                obj => !IsStart
+                ));
+            }
+        }
+
         public Game(Cell[,] beginState, IDialogService dialogService, IFileServiceAsync asyncFileService)
         {
             Height = beginState.GetLength(0);

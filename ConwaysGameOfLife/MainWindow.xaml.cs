@@ -17,6 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Microsoft.Xaml.Behaviors;
 
 namespace ConwaysGameOfLife
 {
@@ -38,10 +39,6 @@ namespace ConwaysGameOfLife
                 StartInfoPanel.Children.Clear();
                 ToolBar.Visibility = Visibility.Visible;
                 CreateMap(widthMap, heightMap, cellSize);
-            };
-            StartGameButton.Click += (sender, e) =>
-            {
-                Map.IsHitTestVisible = false;
             };
             SizeMenu.AddHandler(RadioButton.CheckedEvent, new RoutedEventHandler(RadioButtonSizeChecked));
         }
@@ -75,7 +72,17 @@ namespace ConwaysGameOfLife
                     Map.Children.Add(shape);
                     Grid.SetRow(shape, x);
                     Grid.SetColumn(shape, y);
-                    shape.MouseDown += (sender, e) => Game.CurrentState[x, y].ToggleState();
+
+                    //shape.MouseDown += (sender, e) => Game.CurrentState[x, y].ToggleState();
+                    var trigger = new Microsoft.Xaml.Behaviors.EventTrigger("MouseDown");
+                    var commandAction = new InvokeCommandAction()
+                    {
+                        Command = Game.ToggleCommand,
+                        CommandParameter = Game.CurrentState[x, y],
+                    };
+                    trigger.Actions.Add(commandAction);
+                    Interaction.GetTriggers(shape).Add(trigger);
+
                     var binding = new Binding
                     {
                         Source = Game.CurrentState[x, y],
