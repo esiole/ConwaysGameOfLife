@@ -26,6 +26,9 @@ namespace ConwaysGameOfLife
         public Cell[,] NextState { get; private set; }
         public bool IsStart { get; private set; }
 
+        private IFileServiceAsync asyncFileService;
+        private IDialogService dialogService;
+
         private Command startCommand;
         public Command StartCommand
         {
@@ -55,12 +58,12 @@ namespace ConwaysGameOfLife
             }
         }
 
-        private Command loadCommand;
-        public Command LoadCommand
+        private Command openCommand;
+        public Command OpenCommand
         {
             get
             {
-                return loadCommand ?? (loadCommand = new Command(obj =>
+                return openCommand ?? (openCommand = new Command(obj =>
                 {
                     ReadJsonAsync();
                 },
@@ -69,12 +72,14 @@ namespace ConwaysGameOfLife
             }
         }
 
-        public Game(Cell[,] beginState)
+        public Game(Cell[,] beginState, IDialogService dialogService, IFileServiceAsync asyncFileService)
         {
             Height = beginState.GetLength(0);
             Width = beginState.GetLength(1);
             CurrentState = beginState;
             NextState = Game.CreateState(Width, Height);
+            this.dialogService = dialogService;
+            this.asyncFileService = asyncFileService;
         }
 
         public static Cell[,] CreateState(int width, int height)
@@ -171,18 +176,33 @@ namespace ConwaysGameOfLife
 
         private async void ReadJsonAsync()
         {
-            var dialog = new OpenFileDialog()
+            //var dialog = new OpenFileDialog()
+            //{
+            //    Filter = "json files (*.json)|*.json",
+            //};
+            //dialog.ShowDialog();
+            //using (var stream = new StreamReader(dialog.FileName))
+            //{
+            //    var json = await stream.ReadToEndAsync();
+            //    var map = JsonConvert.DeserializeObject<Cell[,]>(json);
+            //    for (int i = 0; i < Height; i++)
+            //        for (int j = 0; j < Width; j++)
+            //            CurrentState[i, j].State = map[i, j].State;
+            //}
+            try
             {
-                Filter = "json files (*.json)|*.json",
-            };
-            dialog.ShowDialog();
-            using (var stream = new StreamReader(dialog.FileName))
+                if (dialogService.OpenFileDialog() == true)
+                {
+                    var map = await asyncFileService.OpenAsync(dialogService.FileName);
+                    for (int i = 0; i < Height; i++)
+                        for (int j = 0; j < Width; j++)
+                            CurrentState[i, j].State = map[i, j].State;
+                    dialogService.ShowMessage("Файл открыт");
+                }
+            }
+            catch (Exception ex)
             {
-                var json = await stream.ReadToEndAsync();
-                var map = JsonConvert.DeserializeObject<Cell[,]>(json);
-                for (int i = 0; i < Height; i++)
-                    for (int j = 0; j < Width; j++)
-                        CurrentState[i, j].State = map[i, j].State;
+                dialogService.ShowMessage(ex.Message);
             }
         }
     }

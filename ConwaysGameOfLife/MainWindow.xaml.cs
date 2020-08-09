@@ -49,7 +49,7 @@ namespace ConwaysGameOfLife
         private void CreateMap(int width, int height, int cellSize)
         {
             var beginState = Game.CreateState(width, height);
-            Game = new Game(beginState);
+            Game = new Game(beginState, new DefaultDialogService(), new JsonAsyncFileService());
 
             for (int j = 0; j < height; j++)
                 Map.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(cellSize) });
@@ -87,7 +87,7 @@ namespace ConwaysGameOfLife
 
             StartGameButton.Command = Game.StartCommand;
             SaveMapButton.Command = Game.SaveCommand;
-            LoadMapButton.Command = Game.LoadCommand;
+            LoadMapButton.Command = Game.OpenCommand;
         }
 
         private void RadioButtonSizeChecked(object sender, RoutedEventArgs e)

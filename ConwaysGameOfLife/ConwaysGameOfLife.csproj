@@ -68,7 +68,11 @@
     </Compile>
     <Compile Include="Cell.cs" />
     <Compile Include="Command.cs" />
+    <Compile Include="DefaultDialogService.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="IDialogService.cs" />
+    <Compile Include="IFileServiceAsync.cs" />
+    <Compile Include="JsonAsyncFileService.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
