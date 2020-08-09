@@ -6,10 +6,12 @@ namespace ConwaysGameOfLife
     public class DefaultDialogService : IDialogService
     {
         public string FileName { get; set; }
+        public string Filter { get; set; }
 
         public bool OpenFileDialog()
         {
             var dialog = new OpenFileDialog();
+            dialog.Filter = Filter;
             if (dialog.ShowDialog() == true)
             {
                 FileName = dialog.FileName;
@@ -21,6 +23,7 @@ namespace ConwaysGameOfLife
         public bool SaveFileDialog()
         {
             var dialog = new SaveFileDialog();
+            dialog.Filter = Filter;
             if (dialog.ShowDialog() == true)
             {
                 FileName = dialog.FileName;

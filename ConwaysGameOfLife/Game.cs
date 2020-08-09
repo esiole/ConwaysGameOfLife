@@ -80,6 +80,7 @@ namespace ConwaysGameOfLife
             NextState = Game.CreateState(Width, Height);
             this.dialogService = dialogService;
             this.asyncFileService = asyncFileService;
+            this.dialogService.Filter = this.asyncFileService.DialogFilter;
         }
 
         public static Cell[,] CreateState(int width, int height)
@@ -162,33 +163,21 @@ namespace ConwaysGameOfLife
 
         private async void WriteJsonAsync()
         {
-            var dialog = new SaveFileDialog()
+            try
             {
-                Filter = "json files (*.json)|*.json",
-            };
-            dialog.ShowDialog();
-            using (var stream = new StreamWriter(dialog.FileName))
+                if (dialogService.SaveFileDialog() == true)
+                {
+                    await asyncFileService.SaveAsync(dialogService.FileName, CurrentState);
+                }
+            }
+            catch (Exception e)
             {
-                var json = JsonConvert.SerializeObject(CurrentState);
-                await stream.WriteLineAsync(json);
+                dialogService.ShowMessage(e.Message);
             }
         }
 
         private async void ReadJsonAsync()
         {
-            //var dialog = new OpenFileDialog()
-            //{
-            //    Filter = "json files (*.json)|*.json",
-            //};
-            //dialog.ShowDialog();
-            //using (var stream = new StreamReader(dialog.FileName))
-            //{
-            //    var json = await stream.ReadToEndAsync();
-            //    var map = JsonConvert.DeserializeObject<Cell[,]>(json);
-            //    for (int i = 0; i < Height; i++)
-            //        for (int j = 0; j < Width; j++)
-            //            CurrentState[i, j].State = map[i, j].State;
-            //}
             try
             {
                 if (dialogService.OpenFileDialog() == true)
@@ -197,12 +186,11 @@ namespace ConwaysGameOfLife
                     for (int i = 0; i < Height; i++)
                         for (int j = 0; j < Width; j++)
                             CurrentState[i, j].State = map[i, j].State;
-                    dialogService.ShowMessage("Файл открыт");
                 }
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                dialogService.ShowMessage(ex.Message);
+                dialogService.ShowMessage(e.Message);
             }
         }
     }

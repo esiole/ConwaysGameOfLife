@@ -4,6 +4,7 @@ namespace ConwaysGameOfLife
 {
     public interface IFileServiceAsync
     {
+        string DialogFilter { get; }
         Task<Cell[,]> OpenAsync(string fileName);
         Task SaveAsync(string fileName, Cell[,] map);
     }

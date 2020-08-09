@@ -11,6 +11,8 @@ namespace ConwaysGameOfLife
 {
     public class JsonAsyncFileService : IFileServiceAsync
     {
+        public string DialogFilter { get => "json files (*.json)|*.json"; }
+
         public async Task<Cell[,]> OpenAsync(string fileName)
         {
             Cell[,] map;
@@ -25,7 +27,11 @@ namespace ConwaysGameOfLife
 
         public async Task SaveAsync(string fileName, Cell[,] map)
         {
-            throw new NotImplementedException();
+            var json = JsonConvert.SerializeObject(map);
+            using (var stream = new StreamWriter(fileName))
+            {
+                await stream.WriteLineAsync(json);
+            }
         }
     }
 }

@@ -9,18 +9,17 @@ namespace Tests
     {
         private void TestCountAliveNeighbour(Cell[,] state, int i, int j, int expectedResult)
         {
-            var game = new Game(state);
+            var game = new Game(state, new DefaultDialogService(), new JsonAsyncFileService());
             Assert.AreEqual(expectedResult, game.GetCountAliveNeighbour(i, j));
         }
 
         private void TestIteration(Cell[,] beginState, Cell[,] endState)
         {
-            var game = new Game(beginState);
+            var game = new Game(beginState, new DefaultDialogService(), new JsonAsyncFileService());
             game.Iteration();
             for (int i = 0; i < beginState.GetLength(0); i++)
                 for (int j = 0; j < beginState.GetLength(1); j++)
                     Assert.AreEqual(game.CurrentState[i, j].State, endState[i, j].State);
-            //Assert.AreEqual(endState, game.CurrentState);
         }
         
         [TestMethod]
@@ -31,7 +30,7 @@ namespace Tests
                 { new Cell(), new Cell(), new Cell(), new Cell(), },
                 { new Cell(), new Cell(), new Cell(), new Cell(), },
             };
-            var game = new Game(state);
+            var game = new Game(state, new DefaultDialogService(), new JsonAsyncFileService());
             Assert.AreEqual(2, game.Height);
             Assert.AreEqual(4, game.Width);
         }
