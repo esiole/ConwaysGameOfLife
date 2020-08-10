@@ -48,7 +48,7 @@ namespace ConwaysGameOfLife
             {
                 while (true)
                 {
-                    Thread.Sleep(1000);
+                    Thread.Sleep(200);
                     Iteration();
                 }
             });
@@ -81,7 +81,6 @@ namespace ConwaysGameOfLife
                 {
                     CurrentState[i, j].State = NextState[i, j].State;
                     NextState[i, j] = new Cell();
-                    //
                 }
             }
         }
