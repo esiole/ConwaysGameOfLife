@@ -50,7 +50,9 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CellTest.cs" />
     <Compile Include="GameTest.cs" />
+    <Compile Include="OpenSaveTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

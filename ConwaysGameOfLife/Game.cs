@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ConwaysGameOfLife
@@ -24,6 +25,8 @@ namespace ConwaysGameOfLife
 
         public void ChangeStateOnTheMap(Cell[,] map)
         {
+            if (HeightMap != map.GetLength(0) || WidthMap != map.GetLength(1))
+                throw new ArgumentException("Размерности переданного массива не совпадают с размерностями текущего состояния.");
             for (int i = 0; i < HeightMap; i++)
                 for (int j = 0; j < WidthMap; j++)
                     CurrentState[i, j].State = map[i, j].State;

@@ -92,6 +92,38 @@ namespace Tests
         }
 
         [TestMethod]
+        public void SetMap()
+        {
+            var game = new Game();
+            var map = Game.CreateMap(4, 4);
+            Assert.IsNull(game.CurrentState);
+            game.SetMap(map);
+            Assert.AreEqual(map, game.CurrentState);
+            var newMap = Game.CreateMap(6, 6);
+            game.SetMap(newMap);
+            Assert.AreEqual(newMap, game.CurrentState);
+        }
+
+        [TestMethod]
+        public void ChangeStateOnTheMap()
+        {
+            var game = new Game();
+            var map = Game.CreateMap(4, 4);
+            game.SetMap(map);
+            map = Game.CreateMap(4, 4);
+            map[0, 0].State = Cell.Alive;
+            map[2, 3].State = Cell.Alive;
+            map[1, 3].State = Cell.Alive;
+            map[2, 0].State = Cell.Alive;
+            game.ChangeStateOnTheMap(map);
+            for (int i = 0; i < game.HeightMap; i++)
+                for (int j = 0; j < game.WidthMap; j++)
+                    Assert.AreEqual(map[i, j].State, game.CurrentState[i, j].State);
+            map = Game.CreateMap(10, 10);
+            Assert.ThrowsException<ArgumentException>(() => game.ChangeStateOnTheMap(map));
+        }
+
+        [TestMethod]
         public void Cycle3Group()
         {
             Func<Cell[,]> getState1 = () =>
