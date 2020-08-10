@@ -63,17 +63,18 @@ namespace ConwaysGameOfLife
             {
                 while (true)
                 {
-                    Thread.Sleep(200);
-                    Iteration();
+                    Thread.Sleep(50);
+                    var parallel = Parallel.For(0, 4, (i) => Iteration(i * WidthMap / 4, (i + 1) * WidthMap / 4));
+                    while (!parallel.IsCompleted) { }
                 }
             });
         }
 
-        public void Iteration()
+        public void Iteration(int widthStart, int widthEnd)
         {
             for (int i = 0; i < HeightMap; i++)
             {
-                for (int j = 0; j < WidthMap; j++)
+                for (int j = widthStart; j < widthEnd; j++)
                 {
                     var cell = CurrentState[i, j];
                     var countAliveNeighbour = GetCountAliveNeighbour(i, j);
@@ -92,7 +93,7 @@ namespace ConwaysGameOfLife
 
             for (int i = 0; i < HeightMap; i++)
             {
-                for (int j = 0; j < WidthMap; j++)
+                for (int j = widthStart; j < widthEnd; j++)
                 {
                     CurrentState[i, j].State = NextState[i, j].State;
                     NextState[i, j] = new Cell();
