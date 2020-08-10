@@ -11,13 +11,21 @@
         WindowStartupLocation="CenterScreen">
     <StackPanel>
         <ToolBar x:Name="ToolBar" Visibility="Collapsed" Height="40">
-            <Button x:Name="StartButton" Command="{Binding StartCommand}">
+            <Button Command="{Binding StartCommand}">
                 <Button.ToolTip>
                     <ToolTip>
                         Начать игру
                     </ToolTip>
                 </Button.ToolTip>
                 <Image Source="./img/start.png"></Image>
+            </Button>
+            <Button x:Name="GridToggleButton">
+                <Button.ToolTip>
+                    <ToolTip>
+                        Показать/убрать сетку
+                    </ToolTip>
+                </Button.ToolTip>
+                <Image Source="./img/grid.png"></Image>
             </Button>
             <Button Command="{Binding RandomCommand}">
                 <Button.ToolTip>
