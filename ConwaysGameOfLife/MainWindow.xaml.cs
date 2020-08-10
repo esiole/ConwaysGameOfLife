@@ -1,34 +1,14 @@
-﻿using Microsoft.Win32;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Threading;
+using Microsoft.Xaml.Behaviors;
 
 namespace ConwaysGameOfLife
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private int widthMap = 10;
-        private int heightMap = 10;
-        private int cellSize = 30;
-        private Game Game;
+        private readonly ApplicationViewModel appViewModel;
 
         public MainWindow()
         {
@@ -37,25 +17,16 @@ namespace ConwaysGameOfLife
             {
                 StartInfoPanel.Children.Clear();
                 ToolBar.Visibility = Visibility.Visible;
-                CreateMap(widthMap, heightMap, cellSize);
+                CreateMap(appViewModel.SelectedSize.WidthCellCount, appViewModel.SelectedSize.HeightCellCount, appViewModel.CellSize);
             };
-            StartGameButton.Click += (sender, e) =>
-            {
-                StartGameButton.IsEnabled = false;
-                SaveMapButton.IsEnabled = false;
-                LoadMapButton.IsEnabled = false;
-                Map.IsHitTestVisible = false;
-                Game.Start();
-            };
-            SaveMapButton.Click += (sender, e) => WriteJsonAsync(/*"data.json", */Game.CurrentState);
-            LoadMapButton.Click += (sender, e) => ReadJsonAsync(/*"data.json"*/);
-            SizeMenu.AddHandler(RadioButton.CheckedEvent, new RoutedEventHandler(RadioButtonSizeChecked));
+            appViewModel = new ApplicationViewModel(new DefaultDialogService(), new JsonAsyncFileService());
+            DataContext = appViewModel;
         }
 
         private void CreateMap(int width, int height, int cellSize)
         {
-            var beginState = Game.CreateState(width, height);
-            Game = new Game(beginState);
+            var beginState = Game.CreateMap(width, height);
+            appViewModel.Game.SetMap(beginState);
 
             for (int j = 0; j < height; j++)
                 Map.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(cellSize) });
@@ -81,54 +52,23 @@ namespace ConwaysGameOfLife
                     Map.Children.Add(shape);
                     Grid.SetRow(shape, x);
                     Grid.SetColumn(shape, y);
-                    shape.MouseDown += (sender, e) => Game.CurrentState[x, y].ToggleState();
+
+                    var trigger = new Microsoft.Xaml.Behaviors.EventTrigger("MouseDown");
+                    var commandAction = new InvokeCommandAction()
+                    {
+                        Command = appViewModel.ToggleCommand,
+                        CommandParameter = beginState[x, y],
+                    };
+                    trigger.Actions.Add(commandAction);
+                    Interaction.GetTriggers(shape).Add(trigger);
+
                     var binding = new Binding
                     {
-                        Source = Game.CurrentState[x, y],
+                        Source = beginState[x, y],
                         Path = new PropertyPath("State")
                     };
                     shape.SetBinding(Shape.FillProperty, binding);
                 }
-            }
-        }
-
-        private void RadioButtonSizeChecked(object sender, RoutedEventArgs e)
-        {
-            var pressed = (RadioButton)e.Source;
-            var text = pressed.Content.ToString();
-            var data = text.Split('x');
-            widthMap = int.Parse(data[0]);
-            heightMap = int.Parse(data[1]);
-        }
-
-        private async void WriteJsonAsync(/*string fileName, */object serializeObject)
-        {
-            var dialog = new SaveFileDialog()
-            {
-                Filter = "json files (*.json)|*.json",
-            };
-            dialog.ShowDialog();
-            using (var stream = new StreamWriter(dialog.FileName))
-            {
-                var json = JsonConvert.SerializeObject(serializeObject);
-                await stream.WriteLineAsync(json);
-            }
-        }
-
-        private async void ReadJsonAsync(/*string fileName*/)
-        {
-            var dialog = new OpenFileDialog()
-            {
-                Filter = "json files (*.json)|*.json",
-            };
-            dialog.ShowDialog();
-            using (var stream = new StreamReader(dialog.FileName))
-            {
-                var json = await stream.ReadToEndAsync();
-                var map = JsonConvert.DeserializeObject<Cell[,]>(json);
-                for (int i = 0; i < heightMap; i++)
-                    for (int j = 0; j < widthMap; j++)
-                        Game.CurrentState[i, j].State = map[i, j].State;
             }
         }
     }
