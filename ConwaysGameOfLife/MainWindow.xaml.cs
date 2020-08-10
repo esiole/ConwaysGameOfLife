@@ -35,7 +35,7 @@ namespace ConwaysGameOfLife
 
             Map.Width = width * cellSize;
             Map.Height = height * cellSize;
-            this.Height = Map.Height + 40;
+            this.Height = Map.Height + 40 + ToolBar.Height;
             this.Width = Map.Width + 15;
 
             for (int i = 0; i < height; i++)

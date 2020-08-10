@@ -8,10 +8,11 @@
         mc:Ignorable="d"
         Title="Conway's Game of Life" Height="400" Width="400">
     <StackPanel>
-        <ToolBar x:Name="ToolBar" Visibility="Collapsed">
-            <Button x:Name="StartGameButton" Command="{Binding StartCommand}">Старт</Button>
-            <Button x:Name="SaveMapButton" Command="{Binding SaveCommand}">Сохранить конфигурацию</Button>
-            <Button x:Name="OpenMapButton" Command="{Binding OpenCommand}">Загрузить конфигурацию</Button>
+        <ToolBar x:Name="ToolBar" Visibility="Collapsed" Height="30">
+            <Button Command="{Binding StartCommand}">Старт</Button>
+            <Button Command="{Binding RandomCommand}">Случайная конфигурация</Button>
+            <Button Command="{Binding SaveCommand}">Сохранить конфигурацию</Button>
+            <Button Command="{Binding OpenCommand}">Загрузить конфигурацию</Button>
         </ToolBar>
         <StackPanel x:Name="StartInfoPanel">
             <TextBlock>Conway's Game of Life</TextBlock>

@@ -41,6 +41,21 @@ namespace ConwaysGameOfLife
             return map;
         }
 
+        public static Cell[,] CreateRandomMap(int width, int height)
+        {
+            var random = new Random();
+            var map = new Cell[height, width];
+            for (int i = 0; i < height; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    if (random.Next(2) == 0) map[i, j] = new Cell();
+                    else  map[i, j] = new Cell(Cell.Alive);
+                }
+            }
+            return map;
+        }
+
         public async void StartAsync()
         {
             IsStart = true;

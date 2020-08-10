@@ -16,6 +16,7 @@ namespace ConwaysGameOfLife
         private Command saveCommand;
         private Command openCommand;
         private Command toggleCommand;
+        private Command randomCommand;
 
         public ObservableCollection<SizeMap> Sizes { get; private set; }
         public SizeMap SelectedSize
@@ -71,6 +72,18 @@ namespace ConwaysGameOfLife
                 {
                     var cell = (Cell)obj;
                     cell.ToggleState();
+                },
+                obj => !Game.IsStart
+                ));
+            }
+        }
+        public Command RandomCommand
+        {
+            get
+            {
+                return randomCommand ?? (randomCommand = new Command(obj =>
+                {
+                    Game.ChangeStateOnTheMap(Game.CreateRandomMap(Game.WidthMap, Game.HeightMap));
                 },
                 obj => !Game.IsStart
                 ));

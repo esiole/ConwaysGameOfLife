@@ -108,18 +108,14 @@ namespace Tests
         public void ChangeStateOnTheMap()
         {
             var game = new Game();
-            var map = Game.CreateMap(4, 4);
+            var map = Game.CreateRandomMap(10, 8);
             game.SetMap(map);
-            map = Game.CreateMap(4, 4);
-            map[0, 0].State = Cell.Alive;
-            map[2, 3].State = Cell.Alive;
-            map[1, 3].State = Cell.Alive;
-            map[2, 0].State = Cell.Alive;
+            map = Game.CreateRandomMap(10, 8);
             game.ChangeStateOnTheMap(map);
             for (int i = 0; i < game.HeightMap; i++)
                 for (int j = 0; j < game.WidthMap; j++)
                     Assert.AreEqual(map[i, j].State, game.CurrentState[i, j].State);
-            map = Game.CreateMap(10, 10);
+            map = Game.CreateMap(4, 4);
             Assert.ThrowsException<ArgumentException>(() => game.ChangeStateOnTheMap(map));
         }
 
