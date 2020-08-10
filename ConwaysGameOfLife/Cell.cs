@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Media;
-using System.Windows.Shapes;
 
 namespace ConwaysGameOfLife
 {
@@ -16,8 +9,9 @@ namespace ConwaysGameOfLife
         public static SolidColorBrush Dead = Brushes.White;
         public static SolidColorBrush Alive = Brushes.Black;
         private SolidColorBrush state;
+        private Color colorState;
 
-        public bool IsAlive { get => state == Alive; }
+        public bool IsAlive { get => colorState == Color.FromRgb(0, 0, 0); }
 
         public SolidColorBrush State
         {
@@ -25,6 +19,7 @@ namespace ConwaysGameOfLife
             set
             {
                 state = value;
+                colorState = value.Color;
                 OnPropertyChanged("State");
             }
         }

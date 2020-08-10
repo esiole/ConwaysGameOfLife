@@ -29,7 +29,7 @@ namespace ConwaysGameOfLife
         private int widthMap = 10;
         private int heightMap = 10;
         private int cellSize = 30;
-        private Game Game;
+        private ApplicationViewModel game;
 
         public MainWindow()
         {
@@ -41,12 +41,17 @@ namespace ConwaysGameOfLife
                 CreateMap(widthMap, heightMap, cellSize);
             };
             SizeMenu.AddHandler(RadioButton.CheckedEvent, new RoutedEventHandler(RadioButtonSizeChecked));
+
+
+            game = new ApplicationViewModel(new DefaultDialogService(), new JsonAsyncFileService());
+            DataContext = game;
         }
 
         private void CreateMap(int width, int height, int cellSize)
         {
+            var s = new Cell(new SolidColorBrush(Color.FromRgb(0, 0, 0)));
             var beginState = Game.CreateState(width, height);
-            Game = new Game(beginState, new DefaultDialogService(), new JsonAsyncFileService());
+            game.SetGameMap(beginState);
 
             for (int j = 0; j < height; j++)
                 Map.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(cellSize) });
@@ -73,28 +78,23 @@ namespace ConwaysGameOfLife
                     Grid.SetRow(shape, x);
                     Grid.SetColumn(shape, y);
 
-                    //shape.MouseDown += (sender, e) => Game.CurrentState[x, y].ToggleState();
                     var trigger = new Microsoft.Xaml.Behaviors.EventTrigger("MouseDown");
                     var commandAction = new InvokeCommandAction()
                     {
-                        Command = Game.ToggleCommand,
-                        CommandParameter = Game.CurrentState[x, y],
+                        Command = game.ToggleCommand,
+                        CommandParameter = beginState[x, y],
                     };
                     trigger.Actions.Add(commandAction);
                     Interaction.GetTriggers(shape).Add(trigger);
 
                     var binding = new Binding
                     {
-                        Source = Game.CurrentState[x, y],
+                        Source = beginState[x, y],
                         Path = new PropertyPath("State")
                     };
                     shape.SetBinding(Shape.FillProperty, binding);
                 }
             }
-
-            StartGameButton.Command = Game.StartCommand;
-            SaveMapButton.Command = Game.SaveCommand;
-            LoadMapButton.Command = Game.OpenCommand;
         }
 
         private void RadioButtonSizeChecked(object sender, RoutedEventArgs e)

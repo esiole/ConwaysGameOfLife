@@ -1,10 +1,5 @@
 ﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ConwaysGameOfLife
@@ -15,14 +10,12 @@ namespace ConwaysGameOfLife
 
         public async Task<Cell[,]> OpenAsync(string fileName)
         {
-            Cell[,] map;
             string json;
             using (var stream = new StreamReader(fileName))
             {
                 json = await stream.ReadToEndAsync();
             }
-            map = JsonConvert.DeserializeObject<Cell[,]>(json);
-            return map;
+            return JsonConvert.DeserializeObject<Cell[,]>(json);
         }
 
         public async Task SaveAsync(string fileName, Cell[,] map)

@@ -1,101 +1,43 @@
-﻿using Microsoft.Win32;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Shapes;
-using System.Windows.Threading;
 
 namespace ConwaysGameOfLife
 {
     public class Game
     {
-        public readonly int Width;
-        public readonly int Height;
+        public int Width;
+        public int Height;
 
         public Cell[,] CurrentState { get; private set; }
         public Cell[,] NextState { get; private set; }
         public bool IsStart { get; private set; }
 
-        private IFileServiceAsync asyncFileService;
-        private IDialogService dialogService;
-
-        private Command startCommand;
-        public Command StartCommand
+        public Game()
         {
-            get
-            {
-                return startCommand ?? (startCommand = new Command(obj =>
-                {
-                    IsStart = true;
-                    Start();
-                }, 
-                obj => !IsStart
-                ));
-            }
+
         }
 
-        private Command saveCommand;
-        public Command SaveCommand
-        {
-            get
-            {
-                return saveCommand ?? (saveCommand = new Command(obj =>
-                {
-                    WriteJsonAsync();
-                },
-                obj => !IsStart
-                ));
-            }
-        }
-
-        private Command openCommand;
-        public Command OpenCommand
-        {
-            get
-            {
-                return openCommand ?? (openCommand = new Command(obj =>
-                {
-                    ReadJsonAsync();
-                },
-                obj => !IsStart
-                ));
-            }
-        }
-
-        private Command toggleCommand;
-        public Command ToggleCommand
-        {
-            get
-            {
-                return toggleCommand ?? (toggleCommand = new Command(obj =>
-                {
-                    var cell = (Cell)obj;
-                    cell.ToggleState();
-                },
-                obj => !IsStart
-                ));
-            }
-        }
-
-        public Game(Cell[,] beginState, IDialogService dialogService, IFileServiceAsync asyncFileService)
+        public Game(Cell[,] beginState)
         {
             Height = beginState.GetLength(0);
             Width = beginState.GetLength(1);
             CurrentState = beginState;
             NextState = Game.CreateState(Width, Height);
-            this.dialogService = dialogService;
-            this.asyncFileService = asyncFileService;
-            this.dialogService.Filter = this.asyncFileService.DialogFilter;
+        }
+
+        public void SetState(Cell[,] state)
+        {
+            Height = state.GetLength(0);
+            Width = state.GetLength(1);
+            CurrentState = state;
+            NextState = Game.CreateState(Width, Height);
+        }
+
+        public void Test(Cell[,] map)
+        {
+            for (int i = 0; i < Height; i++)
+                for (int j = 0; j < Width; j++)
+                    CurrentState[i, j].State = map[i, j].State;
         }
 
         public static Cell[,] CreateState(int width, int height)
@@ -109,6 +51,7 @@ namespace ConwaysGameOfLife
 
         public async void Start()
         {
+            IsStart = true;
             await Task.Run(() =>
             {
                 while (true)
@@ -174,39 +117,6 @@ namespace ConwaysGameOfLife
             if (CurrentState[iIncrement, jIncrement].IsAlive) countAlive++;
 
             return countAlive;
-        }
-
-        private async void WriteJsonAsync()
-        {
-            try
-            {
-                if (dialogService.SaveFileDialog() == true)
-                {
-                    await asyncFileService.SaveAsync(dialogService.FileName, CurrentState);
-                }
-            }
-            catch (Exception e)
-            {
-                dialogService.ShowMessage(e.Message);
-            }
-        }
-
-        private async void ReadJsonAsync()
-        {
-            try
-            {
-                if (dialogService.OpenFileDialog() == true)
-                {
-                    var map = await asyncFileService.OpenAsync(dialogService.FileName);
-                    for (int i = 0; i < Height; i++)
-                        for (int j = 0; j < Width; j++)
-                            CurrentState[i, j].State = map[i, j].State;
-                }
-            }
-            catch (Exception e)
-            {
-                dialogService.ShowMessage(e.Message);
-            }
         }
     }
 }
