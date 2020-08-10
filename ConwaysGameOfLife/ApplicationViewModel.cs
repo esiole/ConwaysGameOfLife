@@ -9,7 +9,7 @@ namespace ConwaysGameOfLife
     {
         public readonly Game Game;
         private SizeMap selectedSize;
-        public readonly int CellSize = 30;
+        public readonly int CellSize = 20;
         private readonly IFileServiceAsync asyncFileService;
         private readonly IDialogService dialogService;
         private Command startCommand;
@@ -98,7 +98,7 @@ namespace ConwaysGameOfLife
             this.dialogService.Filter = asyncFileService.DialogFilter;
             Sizes = new ObservableCollection<SizeMap>
             {
-                new SizeMap(10, 10), new SizeMap(20, 30), new SizeMap(30, 20),
+                new SizeMap(20, 20), new SizeMap(30, 35), new SizeMap(50, 30), new SizeMap(75, 35),
             };
             SelectedSize = Sizes[0];
         }

@@ -63,8 +63,9 @@ namespace ConwaysGameOfLife
             {
                 while (true)
                 {
-                    Thread.Sleep(50);
-                    var parallel = Parallel.For(0, 4, (i) => Iteration(i * WidthMap / 4, (i + 1) * WidthMap / 4));
+                    Thread.Sleep(100);
+                    int max = 12;
+                    var parallel = Parallel.For(0, max, (i) => Iteration(i * WidthMap / max, (i + 1) * WidthMap / max));
                     while (!parallel.IsCompleted) { }
                 }
             });
