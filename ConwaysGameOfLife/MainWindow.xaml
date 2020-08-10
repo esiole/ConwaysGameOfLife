@@ -6,13 +6,43 @@
         xmlns:local="clr-namespace:ConwaysGameOfLife"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="Conway's Game of Life" Height="400" Width="400">
+        Title="Conway's Game of Life" Height="400" Width="400"
+        Icon="./img/logo.png"
+        WindowStartupLocation="CenterScreen">
     <StackPanel>
-        <ToolBar x:Name="ToolBar" Visibility="Collapsed" Height="30">
-            <Button Command="{Binding StartCommand}">Старт</Button>
-            <Button Command="{Binding RandomCommand}">Случайная конфигурация</Button>
-            <Button Command="{Binding SaveCommand}">Сохранить конфигурацию</Button>
-            <Button Command="{Binding OpenCommand}">Загрузить конфигурацию</Button>
+        <ToolBar x:Name="ToolBar" Visibility="Collapsed" Height="40">
+            <Button Command="{Binding StartCommand}">
+                <Button.ToolTip>
+                    <ToolTip>
+                        Начать игру
+                    </ToolTip>
+                </Button.ToolTip>
+                <Image Source="./img/start.png"></Image>
+            </Button>
+            <Button Command="{Binding RandomCommand}">
+                <Button.ToolTip>
+                    <ToolTip>
+                        Задать случайное расположение клеток
+                    </ToolTip>
+                </Button.ToolTip>
+                <Image Source="./img/random.png"></Image>
+            </Button>
+            <Button Command="{Binding SaveCommand}">
+                <Button.ToolTip>
+                    <ToolTip>
+                        Сохранить текущее расположение клеток
+                    </ToolTip>
+                </Button.ToolTip>
+                <Image Source="./img/save.png"></Image>
+            </Button>
+            <Button Command="{Binding OpenCommand}">
+                <Button.ToolTip>
+                    <ToolTip>
+                        Загрузить расположение клеток
+                    </ToolTip>
+                </Button.ToolTip>
+                <Image Source="./img/open.png"></Image>
+            </Button>
         </ToolBar>
         <StackPanel x:Name="StartInfoPanel">
             <TextBlock>Conway's Game of Life</TextBlock>

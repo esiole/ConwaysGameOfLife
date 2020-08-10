@@ -37,6 +37,10 @@ namespace ConwaysGameOfLife
             Map.Height = height * cellSize;
             this.Height = Map.Height + 40 + ToolBar.Height;
             this.Width = Map.Width + 15;
+            var screenHeight = SystemParameters.FullPrimaryScreenHeight;
+            var screenWidth = SystemParameters.FullPrimaryScreenWidth;
+            this.Top = (screenHeight - this.ActualHeight) / 2;
+            this.Left = (screenWidth - this.ActualWidth) / 2;
 
             for (int i = 0; i < height; i++)
             {
