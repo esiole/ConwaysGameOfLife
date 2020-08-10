@@ -19,6 +19,7 @@ namespace ConwaysGameOfLife
                 ToolBar.Visibility = Visibility.Visible;
                 CreateMap(appViewModel.SelectedSize.WidthCellCount, appViewModel.SelectedSize.HeightCellCount, appViewModel.CellSize);
             };
+            StartButton.Click += (sender, e) => Map.ShowGridLines = false;
             appViewModel = new ApplicationViewModel(new DefaultDialogService(), new JsonAsyncFileService());
             DataContext = appViewModel;
         }
