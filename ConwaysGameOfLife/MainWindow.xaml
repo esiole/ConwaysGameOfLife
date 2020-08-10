@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ConwaysGameOfLife"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="Conway's Game of Life" Height="400" Width="400"
+        Title="Conway's Game of Life" Height="500" Width="500"
         Icon="./img/logo.png"
         WindowStartupLocation="CenterScreen">
     <StackPanel>
@@ -54,10 +54,36 @@
                     <ListBox ItemsSource="{Binding Sizes}" SelectedItem="{Binding SelectedSize}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <StackPanel>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30"></RowDefinition>
+                                        <RowDefinition Height="30"></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="50"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="./img/width.png" Grid.Column="0" Grid.Row="0">
+                                        <Image.ToolTip>
+                                            <ToolTip>
+                                                Ширина карты
+                                            </ToolTip>
+                                        </Image.ToolTip>
+                                    </Image>
+                                    <Image Source="./img/height.png" Grid.Column="0" Grid.Row="1">
+                                        <Image.ToolTip>
+                                            <ToolTip>
+                                                Высота карты
+                                            </ToolTip>
+                                        </Image.ToolTip>
+                                    </Image>
+                                    <TextBlock Text="{Binding Path=WidthStr}" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="{Binding Path=HeightStr}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"/>
+                                </Grid>
+                                <!--<StackPanel>
                                     <TextBlock Text="{Binding Path=WidthStr}"/>
                                     <TextBlock Text="{Binding Path=HeightStr}"/>
-                                </StackPanel>
+                                </StackPanel>-->
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
