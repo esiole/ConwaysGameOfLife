@@ -1,33 +1,14 @@
-﻿using Microsoft.Win32;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Threading;
 using Microsoft.Xaml.Behaviors;
 
 namespace ConwaysGameOfLife
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly int cellSize = 30;
-        private ApplicationViewModel game;
+        private readonly ApplicationViewModel appViewModel;
 
         public MainWindow()
         {
@@ -36,17 +17,16 @@ namespace ConwaysGameOfLife
             {
                 StartInfoPanel.Children.Clear();
                 ToolBar.Visibility = Visibility.Visible;
-                CreateMap(game.SelectedSize.Width, game.SelectedSize.Height, cellSize);
+                CreateMap(appViewModel.SelectedSize.WidthCellCount, appViewModel.SelectedSize.HeightCellCount, appViewModel.CellSize);
             };
-
-            game = new ApplicationViewModel(new DefaultDialogService(), new JsonAsyncFileService());
-            DataContext = game;
+            appViewModel = new ApplicationViewModel(new DefaultDialogService(), new JsonAsyncFileService());
+            DataContext = appViewModel;
         }
 
         private void CreateMap(int width, int height, int cellSize)
         {
-            var beginState = Game.CreateState(width, height);
-            game.SetGameMap(beginState);
+            var beginState = Game.CreateMap(width, height);
+            appViewModel.Game.SetMap(beginState);
 
             for (int j = 0; j < height; j++)
                 Map.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(cellSize) });
@@ -76,7 +56,7 @@ namespace ConwaysGameOfLife
                     var trigger = new Microsoft.Xaml.Behaviors.EventTrigger("MouseDown");
                     var commandAction = new InvokeCommandAction()
                     {
-                        Command = game.ToggleCommand,
+                        Command = appViewModel.ToggleCommand,
                         CommandParameter = beginState[x, y],
                     };
                     trigger.Actions.Add(commandAction);

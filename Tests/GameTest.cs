@@ -9,13 +9,15 @@ namespace Tests
     {
         private void TestCountAliveNeighbour(Cell[,] state, int i, int j, int expectedResult)
         {
-            var game = new Game(state);
+            var game = new Game();
+            game.SetMap(state);
             Assert.AreEqual(expectedResult, game.GetCountAliveNeighbour(i, j));
         }
 
         private void TestIteration(Cell[,] beginState, Cell[,] endState)
         {
-            var game = new Game(beginState);
+            var game = new Game();
+            game.SetMap(beginState);
             game.Iteration();
             for (int i = 0; i < beginState.GetLength(0); i++)
                 for (int j = 0; j < beginState.GetLength(1); j++)
@@ -30,15 +32,16 @@ namespace Tests
                 { new Cell(), new Cell(), new Cell(), new Cell(), },
                 { new Cell(), new Cell(), new Cell(), new Cell(), },
             };
-            var game = new Game(state);
-            Assert.AreEqual(2, game.Height);
-            Assert.AreEqual(4, game.Width);
+            var game = new Game();
+            game.SetMap(state);
+            Assert.AreEqual(2, game.HeightMap);
+            Assert.AreEqual(4, game.WidthMap);
         }
 
         [TestMethod]
         public void AllAliveNeighbour()
         {
-            var state = Game.CreateState(3, 3);
+            var state = Game.CreateMap(3, 3);
             foreach (var e in state)
                 e.State = Cell.Alive;
             TestCountAliveNeighbour(state, 2, 2, 8);
@@ -47,16 +50,16 @@ namespace Tests
         [TestMethod]
         public void AllDeadNeighbour()
         {
-            TestCountAliveNeighbour(Game.CreateState(3, 3), 2, 2, 0);
+            TestCountAliveNeighbour(Game.CreateMap(3, 3), 2, 2, 0);
         }
 
         [TestMethod]
         public void HorizontalScroll()
         {
-            var state = Game.CreateState(3, 3);
+            var state = Game.CreateMap(3, 3);
             state[0, 2].State = Cell.Alive;
             TestCountAliveNeighbour(state, 0, 0, 1);
-            state = Game.CreateState(3, 4);
+            state = Game.CreateMap(3, 4);
             state[2, 0].State = Cell.Alive;
             TestCountAliveNeighbour(state, 2, 2, 1);
         }
@@ -64,10 +67,10 @@ namespace Tests
         [TestMethod]
         public void VerticalScroll()
         {
-            var state = Game.CreateState(4, 3);
+            var state = Game.CreateMap(4, 3);
             state[2, 0].State = Cell.Alive;
             TestCountAliveNeighbour(state, 0, 0, 1);
-            state = Game.CreateState(3, 3);
+            state = Game.CreateMap(3, 3);
             state[0, 2].State = Cell.Alive;
             TestCountAliveNeighbour(state, 2, 2, 1);
         }
@@ -75,14 +78,14 @@ namespace Tests
         [TestMethod]
         public void DiagonalScroll()
         {
-            var state = Game.CreateState(3, 3);
+            var state = Game.CreateMap(3, 3);
             state[2, 2].State = Cell.Alive;
             TestCountAliveNeighbour(state, 0, 0, 1);
-            state = Game.CreateState(3, 3);
+            state = Game.CreateMap(3, 3);
             state[0, 0].State = Cell.Alive;
             state[0, 1].State = Cell.Alive;
             TestCountAliveNeighbour(state, 2, 2, 2);
-            state = Game.CreateState(3, 3);
+            state = Game.CreateMap(3, 3);
             state[2, 0].State = Cell.Alive;
             state[2, 2].State = Cell.Alive;
             TestCountAliveNeighbour(state, 0, 1, 2);
@@ -93,7 +96,7 @@ namespace Tests
         {
             Func<Cell[,]> getState1 = () =>
             {
-                var map = Game.CreateState(5, 5);
+                var map = Game.CreateMap(5, 5);
                 map[1, 2].State = Cell.Alive;
                 map[2, 2].State = Cell.Alive;
                 map[3, 2].State = Cell.Alive;
@@ -101,7 +104,7 @@ namespace Tests
             };
             Func<Cell[,]> getState2 = () =>
             {
-                var map = Game.CreateState(5, 5);
+                var map = Game.CreateMap(5, 5);
                 map[2, 1].State = Cell.Alive;
                 map[2, 2].State = Cell.Alive;
                 map[2, 3].State = Cell.Alive;
@@ -116,7 +119,7 @@ namespace Tests
         {
             Func<Cell[,]> getState1 = () =>
             {
-                var map = Game.CreateState(4, 4);
+                var map = Game.CreateMap(4, 4);
                 map[1, 1].State = Cell.Alive;
                 map[1, 2].State = Cell.Alive;
                 map[2, 1].State = Cell.Alive;
@@ -134,14 +137,14 @@ namespace Tests
 
         private Cell[,] PointState()
         {
-            var map = Game.CreateState(5, 5);
+            var map = Game.CreateMap(5, 5);
             map[2, 2].State = Cell.Alive;
             return map;
         }
 
         private Cell[,] SecondPointHorizontalState()
         {
-            var map = Game.CreateState(5, 5);
+            var map = Game.CreateMap(5, 5);
             map[2, 2].State = Cell.Alive;
             map[2, 3].State = Cell.Alive;
             return map;
@@ -149,7 +152,7 @@ namespace Tests
 
         private Cell[,] SecondPointVerticalState()
         {
-            var map = Game.CreateState(5, 5);
+            var map = Game.CreateMap(5, 5);
             map[2, 2].State = Cell.Alive;
             map[3, 2].State = Cell.Alive;
             return map;
@@ -167,7 +170,7 @@ namespace Tests
         {
             Func<Cell[,]> getState1 = () =>
             {
-                var map = Game.CreateState(5, 5);
+                var map = Game.CreateMap(5, 5);
                 map[1, 2].State = Cell.Alive;
                 map[3, 2].State = Cell.Alive;
                 map[2, 3].State = Cell.Alive;
@@ -188,7 +191,7 @@ namespace Tests
         {
             Func<Cell[,]> getState1 = () =>
             {
-                var map = Game.CreateState(5, 5);
+                var map = Game.CreateMap(5, 5);
                 map[1, 2].State = Cell.Alive;
                 map[2, 2].State = Cell.Alive;
                 map[3, 3].State = Cell.Alive;
@@ -209,7 +212,7 @@ namespace Tests
         {
             Func<Cell[,]> getState1 = () =>
             {
-                var map = Game.CreateState(5, 5);
+                var map = Game.CreateMap(5, 5);
                 map[1, 3].State = Cell.Alive;
                 map[2, 2].State = Cell.Alive;
                 map[3, 1].State = Cell.Alive;
@@ -230,7 +233,7 @@ namespace Tests
         {
             Func<Cell[,]> getState1 = () =>
             {
-                var map = Game.CreateState(5, 5);
+                var map = Game.CreateMap(5, 5);
                 map[1, 1].State = Cell.Alive;
                 map[2, 3].State = Cell.Alive;
                 map[3, 2].State = Cell.Alive;
@@ -251,7 +254,7 @@ namespace Tests
         {
             Func<Cell[,]> getState1 = () =>
             {
-                var map = Game.CreateState(5, 5);
+                var map = Game.CreateMap(5, 5);
                 map[1, 1].State = Cell.Alive;
                 map[1, 3].State = Cell.Alive;
                 map[3, 2].State = Cell.Alive;
@@ -272,7 +275,7 @@ namespace Tests
         {
             Func<Cell[,]> getState1 = () =>
             {
-                var map = Game.CreateState(5, 5);
+                var map = Game.CreateMap(5, 5);
                 map[1, 1].State = Cell.Alive;
                 map[1, 3].State = Cell.Alive;
                 map[3, 3].State = Cell.Alive;
@@ -293,7 +296,7 @@ namespace Tests
         {
             Func<Cell[,]> getState1 = () =>
             {
-                var map = Game.CreateState(5, 5);
+                var map = Game.CreateMap(5, 5);
                 map[2, 1].State = Cell.Alive;
                 map[2, 3].State = Cell.Alive;
                 map[3, 3].State = Cell.Alive;
@@ -305,7 +308,7 @@ namespace Tests
         [TestMethod]
         public void FromPointToNull()
         {
-            TestIteration(PointState(), Game.CreateState(5, 5));
+            TestIteration(PointState(), Game.CreateMap(5, 5));
         }
 
         /// <summary>
@@ -316,8 +319,8 @@ namespace Tests
         [TestMethod]
         public void Group2ToNull()
         {
-            TestIteration(SecondPointHorizontalState(), Game.CreateState(5, 5));
-            TestIteration(SecondPointVerticalState(), Game.CreateState(5, 5));
+            TestIteration(SecondPointHorizontalState(), Game.CreateMap(5, 5));
+            TestIteration(SecondPointVerticalState(), Game.CreateMap(5, 5));
         }
     }
 }

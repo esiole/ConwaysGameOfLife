@@ -7,14 +7,15 @@ namespace ConwaysGameOfLife
 {
     public class ApplicationViewModel : INotifyPropertyChanged
     {
+        public readonly Game Game;
+        private SizeMap selectedSize;
+        public readonly int CellSize = 30;
         private readonly IFileServiceAsync asyncFileService;
         private readonly IDialogService dialogService;
         private Command startCommand;
         private Command saveCommand;
         private Command openCommand;
         private Command toggleCommand;
-        private SizeMap selectedSize;
-        public readonly Game Game;
 
         public ObservableCollection<SizeMap> Sizes { get; private set; }
         public SizeMap SelectedSize
@@ -32,7 +33,7 @@ namespace ConwaysGameOfLife
             {
                 return startCommand ?? (startCommand = new Command(obj =>
                 {
-                    Game.Start();
+                    Game.StartAsync();
                 },
                 obj => !Game.IsStart
                 ));
@@ -81,18 +82,12 @@ namespace ConwaysGameOfLife
             Game = new Game();
             this.dialogService = dialogService;
             this.asyncFileService = asyncFileService;
-            this.dialogService.Filter = this.asyncFileService.DialogFilter;
-
+            this.dialogService.Filter = asyncFileService.DialogFilter;
             Sizes = new ObservableCollection<SizeMap>
             {
                 new SizeMap(10, 10), new SizeMap(20, 30), new SizeMap(30, 20),
             };
             SelectedSize = Sizes[0];
-        }
-
-        public void SetGameMap(Cell[,] map)
-        {
-            Game.SetState(map);
         }
 
         private async void WriteJsonAsync()
@@ -116,7 +111,7 @@ namespace ConwaysGameOfLife
             {
                 if (dialogService.OpenFileDialog() == true)
                 {
-                    Game.Test(await asyncFileService.OpenAsync(dialogService.FileName));
+                    Game.ChangeStateOnTheMap(await asyncFileService.OpenAsync(dialogService.FileName));
                 }
             }
             catch (Exception e)

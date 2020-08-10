@@ -2,15 +2,15 @@
 {
     public class SizeMap
     {
-        public int Width { get; private set; }
-        public int Height { get; private set; }
-        public string WidthStr { get => $"Ширина карты: {Width}"; }
-        public string HeightStr { get => $"Высота карты: {Height}"; }
+        public int WidthCellCount { get; private set; }
+        public int HeightCellCount { get; private set; }
+        public string WidthStr { get => $"Ширина карты: {WidthCellCount}"; }
+        public string HeightStr { get => $"Высота карты: {HeightCellCount}"; }
 
-        public SizeMap(int width, int height)
+        public SizeMap(int widthCellCount, int heightCellCount)
         {
-            Width = width;
-            Height = height;
+            WidthCellCount = widthCellCount;
+            HeightCellCount = heightCellCount;
         }
     }
 }

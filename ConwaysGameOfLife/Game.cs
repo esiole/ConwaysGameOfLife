@@ -5,42 +5,31 @@ namespace ConwaysGameOfLife
 {
     public class Game
     {
-        public int Width;
-        public int Height;
+        public int WidthMap;
+        public int HeightMap;
 
         public Cell[,] CurrentState { get; private set; }
         public Cell[,] NextState { get; private set; }
         public bool IsStart { get; private set; }
 
-        public Game()
-        {
+        public Game() { }
 
+        public void SetMap(Cell[,] map)
+        {
+            HeightMap = map.GetLength(0);
+            WidthMap = map.GetLength(1);
+            CurrentState = map;
+            NextState = Game.CreateMap(WidthMap, HeightMap);
         }
 
-        public Game(Cell[,] beginState)
+        public void ChangeStateOnTheMap(Cell[,] map)
         {
-            Height = beginState.GetLength(0);
-            Width = beginState.GetLength(1);
-            CurrentState = beginState;
-            NextState = Game.CreateState(Width, Height);
-        }
-
-        public void SetState(Cell[,] state)
-        {
-            Height = state.GetLength(0);
-            Width = state.GetLength(1);
-            CurrentState = state;
-            NextState = Game.CreateState(Width, Height);
-        }
-
-        public void Test(Cell[,] map)
-        {
-            for (int i = 0; i < Height; i++)
-                for (int j = 0; j < Width; j++)
+            for (int i = 0; i < HeightMap; i++)
+                for (int j = 0; j < WidthMap; j++)
                     CurrentState[i, j].State = map[i, j].State;
         }
 
-        public static Cell[,] CreateState(int width, int height)
+        public static Cell[,] CreateMap(int width, int height)
         {
             var map = new Cell[height, width];
             for (int i = 0; i < height; i++)
@@ -49,7 +38,7 @@ namespace ConwaysGameOfLife
             return map;
         }
 
-        public async void Start()
+        public async void StartAsync()
         {
             IsStart = true;
             await Task.Run(() =>
@@ -64,9 +53,9 @@ namespace ConwaysGameOfLife
 
         public void Iteration()
         {
-            for (int i = 0; i < Height; i++)
+            for (int i = 0; i < HeightMap; i++)
             {
-                for (int j = 0; j < Width; j++)
+                for (int j = 0; j < WidthMap; j++)
                 {
                     var cell = CurrentState[i, j];
                     var countAliveNeighbour = GetCountAliveNeighbour(i, j);
@@ -83,9 +72,9 @@ namespace ConwaysGameOfLife
                 }
             }
 
-            for (int i = 0; i < Height; i++)
+            for (int i = 0; i < HeightMap; i++)
             {
-                for (int j = 0; j < Width; j++)
+                for (int j = 0; j < WidthMap; j++)
                 {
                     CurrentState[i, j].State = NextState[i, j].State;
                     NextState[i, j] = new Cell();
@@ -99,13 +88,13 @@ namespace ConwaysGameOfLife
             int countAlive = 0;
 
             int iIncrement = i + 1;
-            if (iIncrement >= Height) iIncrement = 0;
+            if (iIncrement >= HeightMap) iIncrement = 0;
             int iDecrement = i - 1;
-            if (iDecrement < 0) iDecrement = Height - 1;
+            if (iDecrement < 0) iDecrement = HeightMap - 1;
             int jIncrement = j + 1;
-            if (jIncrement >= Width) jIncrement = 0;
+            if (jIncrement >= WidthMap) jIncrement = 0;
             int jDecrement = j - 1;
-            if (jDecrement < 0) jDecrement = Width - 1;
+            if (jDecrement < 0) jDecrement = WidthMap - 1;
 
             if (CurrentState[iDecrement, jDecrement].IsAlive) countAlive++;
             if (CurrentState[i, jDecrement].IsAlive) countAlive++;
