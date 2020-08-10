@@ -87,7 +87,7 @@ namespace ConwaysGameOfLife
             {
                 new SizeMap(10, 10), new SizeMap(20, 30), new SizeMap(30, 20),
             };
-            //SelectedSize = Sizes[0];
+            SelectedSize = Sizes[0];
         }
 
         public void SetGameMap(Cell[,] map)

@@ -26,9 +26,7 @@ namespace ConwaysGameOfLife
     /// </summary>
     public partial class MainWindow : Window
     {
-        private int widthMap = 10;
-        private int heightMap = 10;
-        private int cellSize = 30;
+        private readonly int cellSize = 30;
         private ApplicationViewModel game;
 
         public MainWindow()
@@ -38,10 +36,8 @@ namespace ConwaysGameOfLife
             {
                 StartInfoPanel.Children.Clear();
                 ToolBar.Visibility = Visibility.Visible;
-                CreateMap(widthMap, heightMap, cellSize);
+                CreateMap(game.SelectedSize.Width, game.SelectedSize.Height, cellSize);
             };
-            SizeMenu.AddHandler(RadioButton.CheckedEvent, new RoutedEventHandler(RadioButtonSizeChecked));
-
 
             game = new ApplicationViewModel(new DefaultDialogService(), new JsonAsyncFileService());
             DataContext = game;
@@ -49,7 +45,6 @@ namespace ConwaysGameOfLife
 
         private void CreateMap(int width, int height, int cellSize)
         {
-            var s = new Cell(new SolidColorBrush(Color.FromRgb(0, 0, 0)));
             var beginState = Game.CreateState(width, height);
             game.SetGameMap(beginState);
 
@@ -95,15 +90,6 @@ namespace ConwaysGameOfLife
                     shape.SetBinding(Shape.FillProperty, binding);
                 }
             }
-        }
-
-        private void RadioButtonSizeChecked(object sender, RoutedEventArgs e)
-        {
-            var pressed = (RadioButton)e.Source;
-            var text = pressed.Content.ToString();
-            var data = text.Split('x');
-            widthMap = int.Parse(data[0]);
-            heightMap = int.Parse(data[1]);
         }
     }
 }

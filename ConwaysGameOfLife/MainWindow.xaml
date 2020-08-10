@@ -20,19 +20,16 @@
                     <TextBlock>Размер поля</TextBlock>
                 </GroupBox.Header>
                 <StackPanel x:Name="SizeMenu">
-                    <ListBox Grid.Column="0" ItemsSource="{Binding Sizes}" SelectedItem="{Binding SelectedSize}">
+                    <ListBox ItemsSource="{Binding Sizes}" SelectedItem="{Binding SelectedSize}">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel>
-                                    <TextBlock Text="{Binding Path=Width}"/>
-                                    <TextBlock Text="{Binding Path=Height}"/>
+                                    <TextBlock Text="{Binding Path=WidthStr}"/>
+                                    <TextBlock Text="{Binding Path=HeightStr}"/>
                                 </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                    <RadioButton GroupName="SizeMap" IsChecked="True">10x10</RadioButton>
-                    <RadioButton GroupName="SizeMap">20x30</RadioButton>
-                    <RadioButton GroupName="SizeMap">30x20</RadioButton>
                     <Button x:Name="CreateMapButton">Создать</Button>
                 </StackPanel>
             </GroupBox>
