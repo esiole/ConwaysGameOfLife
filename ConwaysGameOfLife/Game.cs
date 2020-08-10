@@ -101,6 +101,11 @@ namespace ConwaysGameOfLife
             }
         }
 
+        public void Iteration()
+        {
+            Iteration(0, WidthMap);
+        }
+
         public int GetCountAliveNeighbour(int i, int j)
         {
             int countAlive = 0;
