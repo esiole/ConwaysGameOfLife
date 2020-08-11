@@ -9,10 +9,13 @@ namespace ConwaysGameOfLife
     public partial class MainWindow : Window
     {
         private readonly ApplicationViewModel appViewModel;
+        private Size startSize;
 
         public MainWindow()
         {
             InitializeComponent();
+            startSize.Width = Width;
+            startSize.Height = Height;
             CreateMapButton.Click += (sender, e) =>
             {
                 StartInfoPanel.Visibility = Visibility.Collapsed;
@@ -27,7 +30,8 @@ namespace ConwaysGameOfLife
                 Map.RowDefinitions.Clear();
                 ToolBar.Visibility = Visibility.Collapsed;
                 StartInfoPanel.Visibility = Visibility.Visible;
-                Width = Height = 500;
+                Width = startSize.Width;
+                Height = startSize.Height;
                 CenterWindow();
             };
             appViewModel = new ApplicationViewModel(new DefaultDialogService(), new JsonAsyncFileService());

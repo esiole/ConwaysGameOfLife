@@ -6,9 +6,30 @@
         xmlns:local="clr-namespace:ConwaysGameOfLife"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="Conway's Game of Life" Height="500" Width="500"
+        Title="Conway's Game of Life" Height="400" Width="400"
         Icon="./img/logo.png"
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <Style x:Key="NameApp">
+            <Setter Property="Control.HorizontalAlignment" Value="Center"/>
+            <Setter Property="Control.FontWeight" Value="ExtraBold"/>
+            <Setter Property="Control.FontSize" Value="30"/>
+            <Setter Property="Control.FontStyle" Value="Italic"/>
+        </Style>
+        <Style x:Key="TabHeader">
+            <Setter Property="Control.FontWeight" Value="Medium"/>
+            <Setter Property="Control.FontSize" Value="18"/>
+        </Style>
+        <Style x:Key="ListItem">
+            <Setter Property="Control.FontWeight" Value="Regular"/>
+            <Setter Property="Control.FontSize" Value="16"/>
+        </Style>
+        <Style x:Key="Button">
+            <Setter Property="Control.FontWeight" Value="Black"/>
+            <Setter Property="Control.FontStyle" Value="Italic"/>
+            <Setter Property="Control.FontSize" Value="16"/>
+        </Style>
+    </Window.Resources>
     <StackPanel>
         <ToolBar x:Name="ToolBar" Visibility="Collapsed" Height="40">
             <Button Command="{Binding StartCommand}">
@@ -61,49 +82,39 @@
             </Button>
         </ToolBar>
         <StackPanel x:Name="StartInfoPanel">
-            <TextBlock HorizontalAlignment="Center" FontWeight="ExtraBold" FontSize="26" FontStyle="Italic">
-                Conway's Game of Life
-            </TextBlock>
-            <TabControl>
+            <TextBlock Style="{StaticResource NameApp}">Conway's Game of Life</TextBlock>
+            <TabControl Margin="10">
                 <TabItem>
                     <TabItem.Header>
-                        <TextBlock>Размер</TextBlock>
+                        <TextBlock Style="{StaticResource TabHeader}">Генерация</TextBlock>
                     </TabItem.Header>
                     <TabItem.Content>
                         <StackPanel x:Name="SizeMenu">
-                            <ListBox ItemsSource="{Binding Sizes}" SelectedItem="{Binding SelectedSize}">
+                            <ListBox ItemsSource="{Binding Sizes}" SelectedItem="{Binding SelectedSize}" Height="235">
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="30"></RowDefinition>
-                                                <RowDefinition Height="30"></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="50"></ColumnDefinition>
-                                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <Image Source="./img/width.png" Grid.Column="0" Grid.Row="0">
+                                        <StackPanel Orientation="Horizontal" Height="30" Margin="5 0">
+                                            <Image Source="./img/width.png" Margin="5 0">
                                                 <Image.ToolTip>
                                                     <ToolTip>
                                                         Ширина карты
                                                     </ToolTip>
                                                 </Image.ToolTip>
                                             </Image>
-                                            <Image Source="./img/height.png" Grid.Column="0" Grid.Row="1">
+                                            <TextBlock Text="{Binding Path=WidthStr}" VerticalAlignment="Center" Margin="5 0" Style="{StaticResource ListItem}"/>
+                                            <Image Source="./img/height.png" Margin="5 0">
                                                 <Image.ToolTip>
                                                     <ToolTip>
                                                         Высота карты
                                                     </ToolTip>
                                                 </Image.ToolTip>
                                             </Image>
-                                            <TextBlock Text="{Binding Path=WidthStr}" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center"/>
-                                            <TextBlock Text="{Binding Path=HeightStr}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center"/>
-                                        </Grid>
+                                            <TextBlock Text="{Binding Path=HeightStr}" VerticalAlignment="Center" Margin="5 0" Style="{StaticResource ListItem}"/>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
                             </ListBox>
-                            <Button x:Name="CreateMapButton">Создать</Button>
+                            <Button x:Name="CreateMapButton" Margin="5" Width="90" Style="{StaticResource Button}">Создать</Button>
                         </StackPanel>
                     </TabItem.Content>
                 </TabItem>
