@@ -61,7 +61,9 @@
             </Button>
         </ToolBar>
         <StackPanel x:Name="StartInfoPanel">
-            <TextBlock>Conway's Game of Life</TextBlock>
+            <TextBlock HorizontalAlignment="Center" FontWeight="ExtraBold" FontSize="26" FontStyle="Italic">
+                Conway's Game of Life
+            </TextBlock>
             <GroupBox>
                 <GroupBox.Header>
                     <TextBlock>Размер поля</TextBlock>
