@@ -18,7 +18,8 @@ namespace Tests
         {
             var game = new Game();
             game.SetMap(beginState);
-            game.Iteration();
+            game.Iteration(0, game.WidthMap);
+            game.UpdateState(0, game.WidthMap);
             for (int i = 0; i < beginState.GetLength(0); i++)
                 for (int j = 0; j < beginState.GetLength(1); j++)
                     Assert.AreEqual(game.CurrentState[i, j].State, endState[i, j].State);

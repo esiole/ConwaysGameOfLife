@@ -32,6 +32,18 @@ namespace ConwaysGameOfLife
                     CurrentState[i, j].State = map[i, j].State;
         }
 
+        public void UpdateState(int widthStart, int widthEnd)
+        {
+            for (int i = 0; i < HeightMap; i++)
+            {
+                for (int j = widthStart; j < widthEnd; j++)
+                {
+                    CurrentState[i, j].State = NextState[i, j].State;
+                    NextState[i, j] = new Cell();
+                }
+            }
+        }
+
         public static Cell[,] CreateMap(int width, int height)
         {
             var map = new Cell[height, width];
@@ -63,9 +75,11 @@ namespace ConwaysGameOfLife
             {
                 while (IsStart)
                 {
-                    Thread.Sleep(100);
+                    Thread.Sleep(150);
                     int max = 12;
                     var parallel = Parallel.For(0, max, (i) => Iteration(i * WidthMap / max, (i + 1) * WidthMap / max));
+                    while (!parallel.IsCompleted) { }
+                    parallel = Parallel.For(0, max, (i) => UpdateState(i * WidthMap / max, (i + 1) * WidthMap / max));
                     while (!parallel.IsCompleted) { }
                 }
             });
@@ -91,20 +105,6 @@ namespace ConwaysGameOfLife
                     }
                 }
             }
-
-            for (int i = 0; i < HeightMap; i++)
-            {
-                for (int j = widthStart; j < widthEnd; j++)
-                {
-                    CurrentState[i, j].State = NextState[i, j].State;
-                    NextState[i, j] = new Cell();
-                }
-            }
-        }
-
-        public void Iteration()
-        {
-            Iteration(0, WidthMap);
         }
 
         public int GetCountAliveNeighbour(int i, int j)
