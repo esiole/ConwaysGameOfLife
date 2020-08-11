@@ -10,9 +10,7 @@ namespace Tests
     {
         private async Task Service(string fileName, IFileServiceAsync service)
         {
-            var map = Game.CreateMap(15, 10);
-            for (int i = 0; i < 10; i++)
-                map[i, i].State = Cell.Alive;
+            var map = Game.CreateRandomMap(15, 10);
             await service.SaveAsync(fileName, map);
             var readMap = await service.OpenAsync(fileName);
             File.Delete(fileName);
