@@ -15,11 +15,21 @@ namespace ConwaysGameOfLife
             InitializeComponent();
             CreateMapButton.Click += (sender, e) =>
             {
-                StartInfoPanel.Children.Clear();
+                StartInfoPanel.Visibility = Visibility.Collapsed;
                 ToolBar.Visibility = Visibility.Visible;
                 CreateMap(appViewModel.SelectedSize.WidthCellCount, appViewModel.SelectedSize.HeightCellCount, appViewModel.CellSize);
             };
             GridToggleButton.Click += (sender, e) => Map.ShowGridLines = !Map.ShowGridLines;
+            BackButton.Click += (sender, e) =>
+            {
+                Map.Children.Clear();
+                Map.ColumnDefinitions.Clear();
+                Map.RowDefinitions.Clear();
+                ToolBar.Visibility = Visibility.Collapsed;
+                StartInfoPanel.Visibility = Visibility.Visible;
+                Width = Height = 500;
+                CenterWindow();
+            };
             appViewModel = new ApplicationViewModel(new DefaultDialogService(), new JsonAsyncFileService());
             DataContext = appViewModel;
         }
@@ -36,12 +46,9 @@ namespace ConwaysGameOfLife
 
             Map.Width = width * cellSize;
             Map.Height = height * cellSize;
-            this.Height = Map.Height + 40 + ToolBar.Height;
-            this.Width = Map.Width + 15;
-            var screenHeight = SystemParameters.FullPrimaryScreenHeight;
-            var screenWidth = SystemParameters.FullPrimaryScreenWidth;
-            this.Top = (screenHeight - this.ActualHeight) / 2;
-            this.Left = (screenWidth - this.ActualWidth) / 2;
+            Height = Map.Height + 40 + ToolBar.Height;
+            Width = Map.Width + 15;
+            CenterWindow();
 
             for (int i = 0; i < height; i++)
             {
@@ -75,6 +82,14 @@ namespace ConwaysGameOfLife
                     shape.SetBinding(Shape.FillProperty, binding);
                 }
             }
+        }
+
+        public void CenterWindow()
+        {
+            var screenHeight = SystemParameters.FullPrimaryScreenHeight;
+            var screenWidth = SystemParameters.FullPrimaryScreenWidth;
+            Top = (screenHeight - ActualHeight) / 2;
+            Left = (screenWidth - ActualWidth) / 2;
         }
     }
 }

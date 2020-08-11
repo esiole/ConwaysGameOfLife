@@ -11,7 +11,7 @@ namespace ConwaysGameOfLife
 
         public Cell[,] CurrentState { get; private set; }
         public Cell[,] NextState { get; private set; }
-        public bool IsStart { get; private set; }
+        public bool IsStart { get; set; }
 
         public Game() { }
 
@@ -61,7 +61,7 @@ namespace ConwaysGameOfLife
             IsStart = true;
             await Task.Run(() =>
             {
-                while (true)
+                while (IsStart)
                 {
                     Thread.Sleep(100);
                     int max = 12;

@@ -17,6 +17,7 @@ namespace ConwaysGameOfLife
         private Command openCommand;
         private Command toggleCommand;
         private Command randomCommand;
+        private Command stopCommand;
 
         public ObservableCollection<SizeMap> Sizes { get; private set; }
         public SizeMap SelectedSize
@@ -87,6 +88,17 @@ namespace ConwaysGameOfLife
                 },
                 obj => !Game.IsStart
                 ));
+            }
+        }
+
+        public Command StopCommand
+        {
+            get
+            {
+                return stopCommand ?? (stopCommand = new Command(obj =>
+                {
+                    Game.IsStart = false;
+                }));
             }
         }
 

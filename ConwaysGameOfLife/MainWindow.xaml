@@ -51,6 +51,14 @@
                 </Button.ToolTip>
                 <Image Source="./img/open.png"></Image>
             </Button>
+            <Button x:Name="BackButton" Command="{Binding StopCommand}">
+                <Button.ToolTip>
+                    <ToolTip>
+                        Вернуться на стартовое меню
+                    </ToolTip>
+                </Button.ToolTip>
+                <Image Source="./img/back.png"></Image>
+            </Button>
         </ToolBar>
         <StackPanel x:Name="StartInfoPanel">
             <TextBlock>Conway's Game of Life</TextBlock>
