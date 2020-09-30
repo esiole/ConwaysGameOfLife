@@ -4,6 +4,6 @@
 
 ## Примеры работы
 
-![Иллюстрация к проекту](https://github.com/esiole/ConwaysGameOfLife/raw/master/examples/1.png)
-![Иллюстрация к проекту](https://github.com/esiole/ConwaysGameOfLife/raw/master/examples/2.png)
-![Иллюстрация к проекту](https://github.com/esiole/ConwaysGameOfLife/raw/master/examples/3.png)
+![Иллюстрация к проекту](https://github.com/esiole/ConwaysGameOfLife/raw/master/Examples/1.png)
+![Иллюстрация к проекту](https://github.com/esiole/ConwaysGameOfLife/raw/master/Examples/2.png)
+![Иллюстрация к проекту](https://github.com/esiole/ConwaysGameOfLife/raw/master/Examples/3.png)
